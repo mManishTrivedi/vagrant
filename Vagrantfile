@@ -15,6 +15,20 @@ Vagrant.configure("2") do |config|
   # Use Proxy to speedup 
   config.vm.provision :shell, :inline => 'echo \'Acquire::http::proxy "http://10.0.0.31:3142";\' > /etc/apt/apt.conf.d/01proxy'
   
-  #### shell provisioner
+  # Before installation need to up-to-date
+  config.vm.provision :shell, :inline => "aptitude update"
+  
+  #### shell provisioner START
+  
+  # Setup Server (Apache2, PHP5 and MySql)
   config.vm.provision :shell, :path => "shell/server.sh"
+  
+  # Setup other required stuff ( pear library, testing stuff like phpunit, sqlite3 etc)
+  config.vm.provision :shell, :path => "shell/package.sh"
+  
+  # Setup CI system (jenkins)
+  # config.vm.provision :shell, :path => "shell/jenkins.sh"
+  
+  
+ 
 end
